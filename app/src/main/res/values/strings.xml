@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">OneCart</string>
+    <string name="tab_instamart">Instamart</string>
+    <string name="tab_zepto">Zepto</string>
+    <string name="tab_blinkit">Blinkit</string>
+    <string name="tab_amazon">Amazon</string>
+    <string name="tab_flipkart">Flipkart</string>
+    <string name="location_permission_rationale">This app needs location access to show nearby stores and delivery options.</string>
+    <string name="location_permission_denied">Location permission denied. You can manually enter your address/pincode on the website.</string>
+</resources>

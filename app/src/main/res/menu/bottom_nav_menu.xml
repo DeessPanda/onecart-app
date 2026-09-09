@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_instamart"
+        android:icon="@drawable/ic_instamart"
+        android:title="@string/tab_instamart" />
+    <item
+        android:id="@+id/tab_zepto"
+        android:icon="@drawable/ic_zepto"
+        android:title="@string/tab_zepto" />
+    <item
+        android:id="@+id/tab_blinkit"
+        android:icon="@drawable/ic_blinkit"
+        android:title="@string/tab_blinkit" />
+    <item
+        android:id="@+id/tab_amazon"
+        android:icon="@drawable/ic_amazon"
+        android:title="@string/tab_amazon" />
+    <item
+        android:id="@+id/tab_flipkart"
+        android:icon="@drawable/ic_flipkart"
+        android:title="@string/tab_flipkart" />
+</menu>

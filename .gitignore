@@ -1,0 +1,25 @@
+# Local config (contains machine-specific SDK path)
+local.properties
+
+# Build output
+*/build/
+build/
+.gradle/
+.kotlin/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.DS_Store
+
+# Signing / keystores — never commit these
+*.jks
+*.keystore
+*.p12
+keystore.properties
+
+# Logs
+*.log
+
+# Captures / crash reports
+captures/
