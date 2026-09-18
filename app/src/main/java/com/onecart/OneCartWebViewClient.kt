@@ -6,18 +6,23 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import java.io.ByteArrayInputStream
 
 /**
  * Custom WebViewClient that keeps http/https links inside the WebView,
- * but launches external apps for other schemes (upi://, tel:, mailto:, intent://, etc.)
+ * launches external apps for other schemes (upi://, tel:, mailto:, intent://, etc.),
+ * and runs the popup blocker (install prompts, cosmetic banners, ad requests).
  */
 class OneCartWebViewClient(private val context: Context) : WebViewClient() {
 
     companion object {
         private const val TAG = "OneCartWebViewClient"
     }
+
+    private val blocker = PopupBlocker.load(context.applicationContext)
 
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
         val url = request.url.toString()
@@ -38,6 +43,19 @@ class OneCartWebViewClient(private val context: Context) : WebViewClient() {
         // For all other schemes, try to launch externally
         try {
             val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+
+            // Suppress "open in the shopping app" deep links so the site
+            // stays in the WebView (fall back to the web URL if provided).
+            val packageName = intent.component?.packageName ?: intent.getPackage()
+            if (packageName != null && blocker.isBlockedApp(packageName)) {
+                val fallback = intent.getStringExtra("browser_fallback_url")
+                Log.d(TAG, "Suppressing app deep link ($packageName) for: $url")
+                if (fallback != null) {
+                    view.loadUrl(fallback)
+                }
+                return true
+            }
+
             intent.addCategory(Intent.CATEGORY_BROWSABLE)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
@@ -59,5 +77,23 @@ class OneCartWebViewClient(private val context: Context) : WebViewClient() {
             Log.e(TAG, "Error parsing URI: $url", e)
             return true
         }
+    }
+
+    override fun onPageFinished(view: WebView, url: String?) {
+        super.onPageFinished(view, url)
+        val scheme = Uri.parse(url ?: "").scheme?.lowercase() ?: ""
+        if (scheme != "http" && scheme != "https") return
+        if (blocker.debug) Log.d(TAG, "Injecting popup blocker for: $url")
+        view.evaluateJavascript(blocker.cleanupScript(), null)
+    }
+
+    override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+        val url = request.url
+        val host = url.host ?: return null
+        if (blocker.isBlockedRequest(host)) {
+            Log.d(TAG, "Blocked request to: $host")
+            return WebResourceResponse("text/plain", "utf-8", ByteArrayInputStream(ByteArray(0)))
+        }
+        return null
     }
 }

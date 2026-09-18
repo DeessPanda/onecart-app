@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -64,6 +65,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Enable edge-to-edge: content draws behind system bars
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // Old phones (API 24-26) can't render light nav-bar icons; use a solid
+        // brand-colored bar so the white system icons stay visible instead of
+        // vanishing over the light bottom nav.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) {
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary)
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -71,38 +82,28 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
-        // Fix status bar icon visibility - use dark icons on light background
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // Modern API: WindowInsetsControllerCompat
-            WindowInsetsControllerCompat(window, binding.root).isAppearanceLightStatusBars = true
-        } else {
-            // Legacy API
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
-
-        // Handle window insets properly - let the root layout handle fitsSystemWindows
-        // The FragmentContainerView is constrained between toolbar and bottomNav
+        // Apply insets: toolbar gets status bar inset, bottom nav gets nav bar inset
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            // Apply insets to toolbar (top) and bottomNav (bottom)
-            val toolbarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val navInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            val navBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
 
-            // Update toolbar top padding for status bar
+            // Toolbar top padding = status bar height (notches/cutouts handled automatically)
             binding.toolbar.setPadding(
                 binding.toolbar.paddingLeft,
-                toolbarInsets.top,
+                statusBarInsets.top,
                 binding.toolbar.paddingRight,
                 binding.toolbar.paddingBottom
             )
 
-            // Update bottom nav bottom padding for navigation bar
+            // Bottom nav bottom padding = navigation bar height
             binding.bottomNav.setPadding(
                 binding.bottomNav.paddingLeft,
                 binding.bottomNav.paddingTop,
                 binding.bottomNav.paddingRight,
-                navInsets.bottom
+                navBarInsets.bottom
             )
 
+            // Fragment container insets are handled by its constraints (toolbar to bottomNav)
             insets
         }
 

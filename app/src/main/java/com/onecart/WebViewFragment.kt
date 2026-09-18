@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.ConsoleMessage
 import android.webkit.GeolocationPermissions
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
@@ -146,6 +147,14 @@ class WebViewFragment : Fragment() {
             ) {
                 Log.d(TAG, "Geolocation requested for origin: $origin")
                 handleGeolocationPrompt(origin, callback)
+            }
+
+            override fun onConsoleMessage(message: ConsoleMessage?): Boolean {
+                val msg = message?.message()
+                if (msg != null && msg.startsWith("[OneCartBlocker]")) {
+                    Log.d("OneCartBlocker", msg)
+                }
+                return super.onConsoleMessage(message)
             }
 
             override fun onReceivedTitle(view: WebView?, title: String?) {

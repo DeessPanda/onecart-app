@@ -1,0 +1,100 @@
+{
+  "debug": true,
+  "requestDomains": [
+    "doubleclick.net",
+    "googlesyndication.com",
+    "googletagservices.com",
+    "adservice.google.com",
+    "adservice.google.co.in",
+    "adsrvr.org",
+    "criteo.com",
+    "criteo.net",
+    "casalemedia.com",
+    "amazon-adsystem.com",
+    "moatads.com",
+    "advertising.com",
+    "smartadserver.com",
+    "teads.tv",
+    "taboola.com",
+    "outbrain.com",
+    "mgid.com",
+    "bidswitch.net",
+    "openx.net",
+    "pubmatic.com",
+    "rubiconproject.com",
+    "adnxs.com",
+    "scorecardresearch.com",
+    "quantserve.com",
+    "addthis.com",
+    "sharethis.com",
+    "adgebra.in",
+    "zedo.com"
+  ],
+  "blockedAppPackages": [
+    "in.swiggy.android",
+    "com.flipkart.android",
+    "com.amazon.mobile.shopping.android.app.shopping",
+    "com.amazon.mShop.android.shopping",
+    "com.zeptonow",
+    "com.blinkit",
+    "com.grofers.customerapp"
+  ],
+  "genericSelectors": [
+    ".smart-banner",
+    "#smart-banner",
+    "[id*='smart-banner']",
+    "[class*='smart-banner']",
+    "[class*='smartbanner']",
+    "a[href*='play.google.com/store/apps']",
+    "a[href*='itunes.apple.com']",
+    "a[href*='apps.apple.com']",
+    "a[href^='intent://']",
+    "a[href^='flipkart://']",
+    "a[href^='amzn://']",
+    "a[href^='swiggy://']",
+    "a[href^='zepto://']",
+    "a[href^='blinkit://']",
+    "a[href^='grofers://']",
+    "[class*='app-install']",
+    "[class*='app-banner']",
+    "[class*='app-prompt']",
+    "[class*='app-modal']",
+    "[class*='download-app']",
+    "[class*='install-cta']",
+    "[id*='app-install']",
+    "[id*='app-banner']",
+    "[data-testid*='app-install']",
+    "[data-testid*='app-banner']"
+  ],
+  "perHost": {
+    "blinkit.com": {
+      "selectors": [],
+      "textRules": [],
+      "clickRules": [
+        {
+          "id": "blinkit-continue-on-web",
+          "scope": "[class*='DownloadAppModal__Container']",
+          "selector": "[class*='DownloadAppModal__ContinueLink']",
+          "text": "continue on web",
+          "fallback": true
+        }
+      ]
+    },
+    "swiggy.com": {
+      "selectors": [],
+      "textRules": [
+        {
+          "id": "instamart-get-app-banner",
+          "kind": "banner",
+          "phrases": [
+            "on the instamart app",
+            "get app"
+          ],
+          "minMatches": 1,
+          "maxDepth": 8,
+          "bannerMaxHeight": 220
+        }
+      ]
+    }
+  }
+}

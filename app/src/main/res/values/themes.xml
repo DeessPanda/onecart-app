@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.OneCart" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -17,5 +17,7 @@
         <item name="android:windowLightNavigationBar">true</item>
         <!-- Enable edge-to-edge. -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <!-- Handle display cutouts (notches, teardrops) - content flows into cutout area -->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="28">shortEdges</item>
     </style>
 </resources>
