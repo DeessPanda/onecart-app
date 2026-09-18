@@ -22,7 +22,7 @@ keystore.properties
 *.log
 
 # AI/IDE session dumps (contain machine paths & workspace metadata)
-*[0-9]{8}-[0-9]{6}-*.json
+[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-*.json
 
 # Captures / crash reports
 captures/
